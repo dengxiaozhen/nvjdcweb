@@ -301,6 +301,80 @@
               </el-row>
               <el-button type="primary" size="medium" @click="UploadWSKEYS">上传 </el-button>
             </el-tab-pane>
+            <el-tab-pane
+              label="CK提交"
+              name="CK提交"
+              :disabled="uploadtype !== 'ql'"
+            >
+              <el-row class="demo-autocomplete">
+                <el-col>
+                  <el-tag type="success" >CK容量:{{ ckcount }}</el-tag>
+                </el-col>
+              </el-row>
+              <el-row class="demo-autocomplete">
+                <el-col>
+                  <span class="elabe">COOKIE</span>
+                </el-col>
+              </el-row>
+              <el-row class="demo-autocomplete">
+                <el-col>
+                  <el-input
+                    style="max-width: 260px"
+                    v-model="cookie"
+                    placeholder="COOKIE"
+                    prefix-icon="el-icon-edit"
+                  />
+                </el-col>
+              </el-row>
+              <el-row class="demo-autocomplete">
+                <el-col>
+                  <span class="elabe">备注</span>
+                </el-col>
+              </el-row>
+              <el-row class="demo-autocomplete">
+                <el-col>
+                  <el-input
+                    v-model="remarks"
+                    style="max-width: 260px"
+                    placeholder="remarks"
+                    prefix-icon="el-icon-lock"
+                  />
+                </el-col>
+              </el-row>
+              <el-row class="demo-autocomplete" v-show="uploadtype === 'ql'">
+                <el-col>
+                  <span class="elabel">服务器</span>
+                </el-col>
+              </el-row>
+              <el-row class="demo-autocomplete" v-show="uploadtype === 'ql'">
+                <el-col>
+                  <el-select
+                    v-model="optionsvlue"
+                    placeholder="Select"
+                    style="width: 100%; max-width: 260px"
+                    @change="valuechange"
+                  >
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                      <span style="float: left">{{ item.label }}</span>
+                      <span
+                        style="
+                          float: right;
+                          color: var(--el-text-color-secondary);
+                          font-size: 13px;
+                        "
+                        >{{ item.count }}</span
+                      >
+                    </el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+              <el-button type="primary" size="medium" @click="UploadCookies">提交</el-button>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </el-card>
@@ -474,6 +548,7 @@ import {
   VerifyCaptcha,
   VerifyCaptcha2,
   UploadWSKEY,
+  UploadCookie,
 } from "@/api/index";
 import Clipboard from "clipboard";
 export default {
@@ -499,6 +574,7 @@ export default {
       ck: "",
       QQ: "",
       wskey: "",
+      cookie: "",
       remarks: "",
       activeName: "first",
       times: 0,
@@ -651,6 +727,34 @@ export default {
         remarks: data.remarks,
         qlkey: data.optionsvlue,
       });
+      loading.close();
+      if (!body.success) {
+        ElMessage.error(body.message);
+      } else {
+        localStorage.setItem("qlid", body.data.qlid);
+        localStorage.setItem("qlkey", body.data.qlkey);
+        router.push("/");
+      }
+    };
+    const UploadCookies = async () => {
+      if (!data.cookie) ElMessage.error("请先输入cookie");
+      if (!data.remarks) ElMessage.error("请先输入备注");
+      const loading = ElLoading.service({
+        lock: true,
+        text: "正在上传",
+      });
+      console.log('1', data.cookie)
+      const ck = data.cookie;
+      const pt_key = ck.split('pt_key=')[1];
+      const pt_pin = ck.split('pt_pin=')[1];
+      console.log(2, pt_key, pt_pin);
+      const body = await UploadCookie({
+        pt_key,
+        pt_pin,
+        remarks: data.remarks,
+        qlkey: data.optionsvlue,
+      });
+      console.log('body', body);
       loading.close();
       if (!body.success) {
         ElMessage.error(body.message);
@@ -898,6 +1002,7 @@ export default {
       valuechange,
       captchaTipclick,
       cap2click,
+      UploadCookies,
     };
   },
 };

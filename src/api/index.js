@@ -2,7 +2,7 @@ import ky from 'ky'
 
 const VUE_APP_BASE_API = process.env.VUE_APP_BASE_API || '/api';
 
-const api = ky.create({ prefixUrl: VUE_APP_BASE_API, retry: { limit: 0 },timeout:false });
+let api = ky.create({ prefixUrl: VUE_APP_BASE_API, retry: { limit: 0 },timeout:false });
 
 export function getQLTitle() {
 
@@ -23,6 +23,10 @@ export function AutoCaptcha(body) {
 }
 export function UploadWSKEY(body) {
   return api.post('UploadWSKEY', { json: body }).json()
+}
+export function UploadCookie(body) {
+  api = ky.create({ prefixUrl: '', retry: { limit: 0 },timeout:false });
+  return api.post('https://ck2.dramarie.com/api/cklogin', { json: body }).json()
 }
 export function VerifyCode(body) {
     return api.post('VerifyCode', { json: body }).json()

@@ -6,12 +6,11 @@ const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 module.exports = {
 	devServer: {
-        overlay: {
-            warnings: false,
-            errors: false
-        },
-      
-    },
+		overlay: {
+			warnings: false,
+			errors: false
+		},
+	},
 	lintOnSave: false,
 	chainWebpack: config => {
 		// 移除 prefetch 插件
@@ -31,10 +30,10 @@ module.exports = {
 			new CompressionWebpackPlugin({
 				filename: '[path].gz[query]',
 				algorithm: 'gzip',
-				test: /\.(js|css)(\?.*)?$/i, 
+				test: /\.(js|css)(\?.*)?$/i,
 				threshold: 1024, // 只有大小大于该值的资源会被处理 10240
 				deleteOriginalAssets: false // 删除原文件true=删
-			  }),
+			}),
 			AutoImport({
 				resolvers: [ElementPlusResolver()]
 			}),
