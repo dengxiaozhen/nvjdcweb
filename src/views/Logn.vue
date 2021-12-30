@@ -305,6 +305,7 @@
               label="CK提交"
               name="CK提交"
               :disabled="uploadtype !== 'ql'"
+              v-if="false"
             >
               <el-row class="demo-autocomplete">
                 <el-col>

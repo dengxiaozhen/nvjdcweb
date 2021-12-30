@@ -1,36 +1,44 @@
 <template>
-
-     <el-container>
-      <el-header class="el-header" style="--el-header-padding:0px;z-index: 1999; " ><Header  :title="title" /></el-header>
-      <el-main class="el-main"><router-view /></el-main>
-    </el-container>
-   
-
- 
+  <el-container>
+    <el-header class="el-header" style="--el-header-padding:0px;z-index: 1999; ">
+      <Header :title="title" />
+    </el-header>
+    <el-main class="el-main">
+      <!-- <video
+        src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+        autoplay
+        class="video"
+        type="video/mp4"
+        loop
+        muted
+      ></video> -->
+      <router-view />
+    </el-main>
+  </el-container>
 </template>
 <script>
-import {  onMounted,reactive, toRefs } from 'vue'
+import { onMounted, reactive, toRefs } from 'vue'
 import Header from '@/components/Header.vue'
-import { getQLTitle} from '@/api/index'
+import { getQLTitle } from '@/api/index'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 export default {
   name: 'App',
   components: {
     Header
-  },setup() {
+  }, setup () {
     let locale = zhCn;
-     let data = reactive({
-       title:"NolanJDCloud",
-     })
-     const getmainConfigtitle = async () => {
-    
-       const configdata = await getQLTitle();
-       console.log(configdata)
-       data.title=configdata.data.title
+    let data = reactive({
+      title: "NolanJDCloud",
+    })
+    const getmainConfigtitle = async () => {
+
+      const configdata = await getQLTitle();
+      console.log(configdata)
+      data.title = configdata.data.title
     }
     getmainConfigtitle();
     // onMounted(getmainConfigtitle)
-  return {
+    return {
       locale,
       ...toRefs(data)
     }
@@ -39,11 +47,11 @@ export default {
 </script>
 
 <style>
-html{
+html {
   touch-action: none;
   touch-action: pan-y;
 }
-body{
+body {
   margin: 0px;
 }
 #app {
@@ -54,17 +62,26 @@ body{
   color: #2c3e50;
 }
 .el-header {
-       
-        position: relative;
-        width: 100%;
-        height: 60px;  
+  position: relative;
+  width: 100%;
+  height: 60px;
 }
 .el-main {
   position: absolute;
-  left: 0;;
+  left: 0;
   right: 0;
   top: 60px;
   bottom: 0;
   overflow-y: scroll;
-  }
+}
+
+.video {
+  width: 100%;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+}
 </style>
